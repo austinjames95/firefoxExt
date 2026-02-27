@@ -7,13 +7,17 @@
   <link rel="stylesheet" href="viewer.css">
 </head>
 <body>
-  <div id="pdf-container"></div>
-
-  <div id="math-panel">
+  <div id="pdf-container">
+  </div>
+    <div id="math-panel">
     <h3>Math Overlay</h3>
     <textarea id="latex-input" placeholder="\frac{1}{2}" rows="4"></textarea>
     <div id="preview-area"></div>
     <button id="place-btn">Click on PDF to place</button>
+    <button class="custom-file-upload">
+      <input type="file" accept=".pdf">
+      Upload
+    </button>
     <div id="status-msg"></div>
   </div>
 

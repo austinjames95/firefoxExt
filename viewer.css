@@ -25,6 +25,16 @@ body {
     display: block;
 }
 
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-flex;
+  padding: 6px 12px;
+  cursor: pointer;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
 /* CRITICAL: position:absolute — coords relative to .page-wrapper */
 .math-overlay {
     position: absolute;

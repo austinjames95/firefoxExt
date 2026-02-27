@@ -12,24 +12,32 @@ const latexInput   = document.getElementById('latex-input');
 const previewArea  = document.getElementById('preview-area');
 const placeBtn     = document.getElementById('place-btn');
 const statusMsg    = document.getElementById('status-msg');
+const fileInput    = document.querySelector('.custom-file-upload input[type="file"]');
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let placingMode = false; // true when the user has clicked "place" and we await a PDF click
 
 // ── Load PDF ──────────────────────────────────────────────────────────────────
-// Read the PDF URL from the query string — background.js put it there as ?file=<encoded-url>
-const params = new URLSearchParams(window.location.search);
-const pdfUrl = params.get('file');
-
-if (!pdfUrl) {
-  pdfContainer.innerHTML = '<p style="color:red;padding:20px">No PDF URL provided.</p>';
-} else {
+// source can be a URL string or a pdf.js document init object e.g. { data: ArrayBuffer }
+async function loadPdf(source) {
+  pdfContainer.innerHTML = '';
   statusMsg.textContent = 'Loading PDF…';
 
-  // pdfjsLib.getDocument() starts fetching + parsing the PDF.
-  // .promise resolves to a PDFDocumentProxy when the document is ready.
-  // top-level await is valid because viewer.html loads this as type="module"
-  const pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+  let pdfDoc;
+  try {
+    // pdfjsLib.getDocument() starts fetching + parsing the PDF.
+    // .promise resolves to a PDFDocumentProxy when the document is ready.
+    pdfDoc = await pdfjsLib.getDocument(source).promise;
+  } catch (err) {
+    console.error('pdf.js failed to load document', err);
+    let msg = `Failed to load PDF:<br>${err.message || err}`;
+    if (typeof source === 'string' && source.startsWith('file://')) {
+      msg += '<br><small>Make sure the extension has permission to access local files ("Allow access to File URLs" in about:addons).</small>';
+    }
+    pdfContainer.innerHTML = `<p style="color:red;padding:20px">${msg}</p>`;
+    statusMsg.textContent = '';
+    return;
+  }
 
   statusMsg.textContent = `Loaded — ${pdfDoc.numPages} page(s). Type LaTeX then click "Place".`;
 
@@ -39,6 +47,25 @@ if (!pdfUrl) {
     await renderPage(pdfDoc, pageNum);
   }
 }
+
+// ── Initial load from query string ───────────────────────────────────────────
+// background.js puts the PDF URL here as ?file=<encoded-url>
+const params = new URLSearchParams(window.location.search);
+const pdfUrl = params.get('file');
+if (pdfUrl) {
+  await loadPdf(pdfUrl);
+}
+
+// ── File picker ───────────────────────────────────────────────────────────────
+// Read the File as an ArrayBuffer and pass { data } directly to pdf.js.
+// This avoids creating a blob:moz-extension:// URL, which pdf.js cannot fetch
+// (its internal XHR gets status 0 for blob URLs in extension pages).
+fileInput.addEventListener('change', async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+  const data = await file.arrayBuffer();
+  loadPdf({ data });
+});
 
 // ── Page rendering ────────────────────────────────────────────────────────────
 async function renderPage(pdfDoc, pageNum) {
