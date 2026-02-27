@@ -4,7 +4,7 @@
 // ── Worker setup ─────────────────────────────────────────────────────────────
 // pdfjsLib is set on window by vendor/pdfjs/pdf.js (loaded as a regular script before this module)
 // browser.runtime.getURL() converts the relative extension path to moz-extension://uuid/...
-pdfjsLib.GlobalWorkerOptions.workerSrc = browser.runtime.getURL('vendor/pdfjs/pdf.worker.js');
+pdfjsLib.GlobalWorkerOptions.workerSrc = browser.runtime.getURL('./vendor/pdfjs/pdf.worker.js');
 
 // ── DOM references ────────────────────────────────────────────────────────────
 const pdfContainer = document.getElementById('pdf-container');

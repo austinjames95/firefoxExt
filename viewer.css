@@ -1,57 +1,113 @@
-body { 
-    background: #525659; display: flex; justify-content: center; font-family: system-ui, sans-serif; 
+body {
+    background: #525659;
+    display: flex;
+    justify-content: center;
+    font-family: system-ui, sans-serif;
 }
 
-#pdf-container { 
-    display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 260px 24px 24px; 
+#pdf-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 260px 24px 24px;
+    z-index: 2000;
 }
 
 /* CRITICAL: position:relative makes this the coordinate anchor for overlays */
-.page-wrapper { 
-    position: relative; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,.5); 
+.page-wrapper {
+    position: relative;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
 }
 
-.page-wrapper canvas { 
-    display: block; 
+.page-wrapper canvas {
+    display: block;
 }
 
 /* CRITICAL: position:absolute — coords relative to .page-wrapper */
-.math-overlay { 
-    position: absolute; cursor: move; user-select: none; padding: 4px; border: 1px dashed transparent; 
+.math-overlay {
+    position: absolute;
+    cursor: move;
+    user-select: none;
+    padding: 4px;
+    border: 1px dashed transparent;
 }
 
-.math-overlay:hover { 
-    border-color: rgba(0,100,255,.6); background: rgba(255,255,255,.85); 
+.math-overlay:hover {
+    border-color: rgba(0, 100, 255, .6);
+    background: rgba(255, 255, 255, .85);
 }
 
-.math-overlay .delete-btn { 
-    position: absolute; top: -10px; right: -10px; width: 20px; height: 20px; background: #e53e3e; color: white; border: none; border-radius: 50%; cursor: pointer; display: none; 
+.math-overlay .delete-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 20px;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
 }
 
-.math-overlay:hover .delete-btn { 
-    display: flex; align-items: center; justify-content: center; 
+.math-overlay:hover .delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#math-panel { 
-    position: fixed; top: 20px; right: 20px; width: 240px; background: #fff; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.3); padding: 16px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; 
+#math-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 240px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .3);
+    padding: 16px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-#latex-input { 
-    width: 100%; font-family: monospace; font-size: 13px; padding: 8px; border: 1px solid #cbd5e0; border-radius: 4px; resize: vertical; 
+#latex-input {
+    width: 100%;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    resize: vertical;
 }
 
-#preview-area { 
-    min-height: 40px; padding: 8px; background: #f7fafc; border-radius: 4px; overflow-x: auto; text-align: center; 
+#preview-area {
+    min-height: 40px;
+    padding: 8px;
+    background: #f7fafc;
+    border-radius: 4px;
+    overflow-x: auto;
+    text-align: center;
 }
 
-#place-btn { 
-    padding: 8px; background: #3182ce; color: white; border: none; border-radius: 4px; cursor: pointer; 
+#place-btn {
+    padding: 8px;
+    background: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-#place-btn.active { 
-    background: #e53e3e; 
+#place-btn.active {
+    background: #e53e3e;
 }
 
-#status-msg { 
-    font-size: 12px; color: #718096; min-height: 18px; 
+#status-msg {
+    font-size: 12px;
+    color: #718096;
+    min-height: 18px;
 }
